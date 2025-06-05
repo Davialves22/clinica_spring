@@ -24,20 +24,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // Suporte a CORS
+                .cors()
                 .and()
-                .csrf().disable() // Desabilita CSRF para permitir chamadas via Postman, JS etc.
+                .csrf().disable()
                 .authorizeHttpRequests(authz -> authz
-                        //.requestMatchers("/", "/home", "/login", "/login-error", "/image/**", "/css/**", "/js/**", "/api/**").permitAll()
-                        //.anyRequest().authenticated()
-
-                        //acessos privados admin
+                        //.requestMatchers("/", "/home", "/login", "/api/public/**").permitAll()
                         //.requestMatchers("/usuarios/**").hasAuthority("ADMIN")
-
-                        //acessos privados medicos
                         //.requestMatchers("/api/medicos/**").hasAuthority("MEDICO")
-
-                        .anyRequest().permitAll() // libera tudo
+                        .anyRequest().permitAll() // Libera tudo
                 )
                 .formLogin(form -> form
                         .loginProcessingUrl("/login")
@@ -47,6 +41,9 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> response.setStatus(200))
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/acesso-negado") // Página personalizada para acesso negado
                 )
                 .authenticationProvider(authenticationProvider());
 
