@@ -30,6 +30,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         //.requestMatchers("/", "/home", "/login", "/login-error", "/image/**", "/css/**", "/js/**", "/api/**").permitAll()
                         //.anyRequest().authenticated()
+
+                        //acessos privados admin
+                        //.requestMatchers("/usuarios/**").hasAuthority("ADMIN")
+
+                        //acessos privados medicos
+                        //.requestMatchers("/api/medicos/**").hasAuthority("MEDICO")
+
                         .anyRequest().permitAll() // libera tudo
                 )
                 .formLogin(form -> form
