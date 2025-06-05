@@ -1,1 +1,1 @@
-select * from usuarios u 
+-- INSERT INTO "perfis" VALUES (1, 'ADMIN'), (2, 'MEDICO'), (3, 'PACIENTE');
