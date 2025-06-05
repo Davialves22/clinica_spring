@@ -30,10 +30,9 @@ public class UsuarioService implements UserDetailsService {
 
     // Implementação do método obrigatório da interface UserDetailsService
     // Usado automaticamente pelo Spring Security no processo de autenticação
-    @Override
-    @Transactional(readOnly = true)
+    @Override @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Busca o usuário no banco usando o e-mail como nome de usuário
+        // Busca o usuário usando o e-mail como nome de usuário
         Usuario usuario = buscarPorEmail(username);
 
         // Se não encontrar o usuário, lança exceção
