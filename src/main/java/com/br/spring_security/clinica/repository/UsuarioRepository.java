@@ -1,4 +1,4 @@
-package com.br.spring_security.clinica.repository.Usuario;
+package com.br.spring_security.clinica.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.br.spring_security.clinica.model.*;

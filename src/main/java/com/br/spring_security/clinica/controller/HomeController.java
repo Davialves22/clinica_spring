@@ -1,38 +1,38 @@
 package com.br.spring_security.clinica.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap; // Considere usar um Map ou DTO para respostas de API
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class HomeController {
 
-    // Endpoint da API para a "home" da API.
-    // O prefixo '/api' evita conflito com a página web principal.
-    @GetMapping({"/api", "/api/home"})
+    // AGORA INCLUIDO NA DOCUMENTAÇÃO DO SWAGGER UI
+    @GetMapping({"/api/v1", "/api/home/v1"}) // Adicionado '/v1'
     public ResponseEntity<String> apiHome() {
-        return ResponseEntity.ok("Bem-vindo à API da clínica");
+        return ResponseEntity.ok("Bem-vindo à API da clínica!");
     }
 
-    // Endpoint da API para login (pode ser usado para exibir informações de login da API)
-    @GetMapping("/api/login")
+    // AGORA INCLUIDO NA DOCUMENTAÇÃO DO SWAGGER UI
+    @GetMapping("/api/login/v1") // Adicionado '/v1'
     public ResponseEntity<String> apiLogin() {
-        return ResponseEntity.ok("Endpoint de login da API");
+        return ResponseEntity.ok("Endpoint informativo de login da API. Use POST para autenticar.");
     }
 
-    // Endpoint da API para erro de login.
-    // Para APIs, geralmente retorna-se um JSON com os detalhes do erro.
-    // Um ModelMap pode funcionar, mas um Map<String, Object> ou um DTO de erro seria mais idiomático para REST.
-    @GetMapping("/api/login-error")
+    // AGORA INCLUIDO NA DOCUMENTAÇÃO DO SWAGGER UI
+    @GetMapping("/api/login-error/v1") // Adicionado '/v1'
     public ResponseEntity<?> apiLoginError() {
-        return ResponseEntity.status(401).body(
-                new ModelMap() {{
-                    put("alerta", "erro");
-                    put("titulo", "Credenciais Inválidas");
-                    put("texto", "Login ou senha incorretos, tente novamente.");
-                    put("subtexto", "Acesso permitido apenas para cadastros já ativados.");
-                }}
-        );
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("status", HttpStatus.UNAUTHORIZED.value());
+        errorDetails.put("error", "Unauthorized");
+        errorDetails.put("message", "Credenciais Inválidas");
+        errorDetails.put("details", "Login ou senha incorretos. Acesso apenas para cadastros ativados.");
+        errorDetails.put("timestamp", System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDetails);
     }
 }

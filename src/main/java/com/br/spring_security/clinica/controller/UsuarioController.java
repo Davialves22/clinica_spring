@@ -1,18 +1,89 @@
 package com.br.spring_security.clinica.controller;
 
-import com.br.spring_security.clinica.model.Medico;
+import com.br.spring_security.clinica.Request.UsuarioRequest;
+import com.br.spring_security.clinica.controller.docs.UsuarioControllerDocs;
 import com.br.spring_security.clinica.model.Usuario;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.br.spring_security.clinica.service.UsuarioService;
 
-@Controller
-@RequestMapping("/usuarios")
-public class UsuarioController {
-    //abrir pagina de dados pessoais de medicos pelo medico
-    @GetMapping({"/novoCadastro/usuario"})
-    public String cadastroPorAdminParaTodos(Usuario usuario){
-        return "usuario/cadastro";
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/usuarios/v1")
+@CrossOrigin
+
+@Tag(name = "Usuários", description = "Endpoints para gerenciamento de usuários na clínica")
+public class UsuarioController implements UsuarioControllerDocs {
+
+    private final UsuarioService usuarioService;
+
+    @Autowired
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
+    @Override
+    @PostMapping(consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE
+    })
+    public ResponseEntity<Usuario> salvar(@Valid @RequestBody UsuarioRequest request) {
+        Usuario usuarioSalvo = usuarioService.salvar(request.toUsuario());
+        return new ResponseEntity<>(usuarioSalvo, HttpStatus.CREATED);
+    }
+
+    @Override
+    @GetMapping(produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE
+    })
+    public List<Usuario> listarTodos() {
+        return usuarioService.listarTodos();
+    }
+
+    @Override
+    @GetMapping(value = "/{id}", produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE
+    })
+    public ResponseEntity<Usuario> obterPorId(@PathVariable Long id) {
+        Usuario usuario = usuarioService.obterPorId(id);
+        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+    }
+
+    @Override
+    @PutMapping(value = "/{id}", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE
+    }, produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE
+    })
+    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioRequest request) {
+        Usuario usuarioAtualizado = usuarioService.atualizar(id, request.toUsuario());
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
+
+    @Override
+    @DeleteMapping(value = "/{id}", produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE
+    })
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        usuarioService.deletar(id);
+        return ResponseEntity.ok().build();
     }
 }
