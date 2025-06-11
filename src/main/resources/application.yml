@@ -31,5 +31,11 @@ spring-doc:
   swagger-ui:
     use-root-path: true
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
 server:
   port: 8080
