@@ -35,7 +35,8 @@ public interface UsuarioControllerDocs {
                     @ApiResponse(description = "Não Encontrado", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Erro Interno do Servidor", responseCode = "500", content = @Content)
             })
-    List<Usuario> listarTodos();
+    ResponseEntity<List<Usuario>> listarTodos();
+
 
     @Operation(summary = "Obtém um Usuário por ID", tags = {"Usuários"},
             responses = {

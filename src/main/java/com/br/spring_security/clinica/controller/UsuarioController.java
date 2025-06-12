@@ -46,9 +46,11 @@ public class UsuarioController implements UsuarioControllerDocs {
             MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_YAML_VALUE
     })
-    public List<Usuario> listarTodos() {
-        return usuarioService.listarTodos();
+    public ResponseEntity<List<Usuario>> listarTodos() {
+        List<Usuario> usuarios = usuarioService.listarTodos();
+        return ResponseEntity.ok(usuarios);
     }
+
 
     @Override
     @GetMapping(value = "/{id}", produces = {
