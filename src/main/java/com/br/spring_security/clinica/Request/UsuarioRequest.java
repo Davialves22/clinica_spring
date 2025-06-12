@@ -33,7 +33,7 @@ public class UsuarioRequest {
     @Size(max = 6, message = "O código verificador deve ter no máximo 6 caracteres.")
     private String codigoVerificador;
 
-    private List<Long> perfisIds; // IDs dos perfis
+    private List<Long> perfisIds;
 
     public Usuario toUsuario() {
         Usuario usuario = new Usuario();
