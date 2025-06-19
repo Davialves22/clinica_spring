@@ -1,14 +1,16 @@
+-- CUIDADO: Limpar tabelas (apaga dados, use só em ambiente de desenvolvimento!)
+DELETE FROM usuarios_tem_perfis;
+DELETE FROM usuarios;
 DELETE FROM perfis;
 DELETE FROM horas;
 
-
--- Perfis iniciais
+-- Inserir perfis iniciais
 INSERT INTO perfis (id, descricao) VALUES
 (1, 'ADMIN'),
 (2, 'MEDICO'),
 (3, 'PACIENTE');
 
--- Horários disponíveis
+-- Inserir horários disponíveis
 INSERT INTO horas (id, hora_minuto) VALUES
 (1, '07:00:00'),
 (2, '07:30:00'),
@@ -30,3 +32,17 @@ INSERT INTO horas (id, hora_minuto) VALUES
 (18, '16:30:00'),
 (19, '17:00:00'),
 (20, '17:30:00');
+
+-- Inserir usuário administrador com senha bcrypt da senha "admin"
+INSERT INTO usuarios (id, email, senha, ativo, codigo_verificador)
+VALUES (
+  1,
+  'admin@clinica.com',
+  '$2a$10$K9yT0vlz8Op7nFtLdCzZOe/Ee9sF0kYj93b7NyPny7YXj0QfIfGva', -- hash bcrypt da senha "admin"
+  true,
+  NULL
+);
+
+-- Associar usuário ao perfil ADMIN
+INSERT INTO usuarios_tem_perfis (usuario_id, perfil_id) VALUES
+(1, 1);
