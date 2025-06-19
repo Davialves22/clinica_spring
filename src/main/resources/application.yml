@@ -11,6 +11,10 @@ spring:
     username: postgres
     password: clinica
 
+  sql:
+    init:
+      mode: always
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,14 +24,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         temp:
           use_jdbc_metadata_defaults: false
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    generate-ddl: true
-
 
 spring-doc:
   paths-to-match:
-    - /api/**/v1/** # Seus endpoints versionados (como medicos/v1)
-    - /api/* # Inclui /api/home, /api/login, /api/login-error, /api etc.
+    - /api/**/v1/**
+    - /api/*
   swagger-ui:
     use-root-path: true
 
